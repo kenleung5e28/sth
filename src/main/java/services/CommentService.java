@@ -1,23 +1,25 @@
 package services;
 
+import main.ToLog;
 import models.Comment;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import proxies.CommentNotificationProxy;
-import repositories.CommentRepository;
+
+import java.util.logging.Logger;
 
 @Service
 public class CommentService {
-    private final CommentRepository commentRepository;
-    private final CommentNotificationProxy commentNotificationProxy;
-
-    public CommentService(CommentRepository commentRepository, @Qualifier("EMAIL") CommentNotificationProxy commentNotificationProxy) {
-        this.commentRepository = commentRepository;
-        this.commentNotificationProxy = commentNotificationProxy;
-    }
+    private Logger logger = Logger.getLogger(CommentService.class.getName());
 
     public void publishComment(Comment comment) {
-        commentRepository.storeComment(comment);
-        commentNotificationProxy.sendComment(comment);
+        logger.info("Publishing comment: " + comment.getText());
+    }
+
+    public void editComment(Comment comment) {
+        logger.info("Editing comment: " + comment.getText());
+    }
+
+    @ToLog
+    public void deleteComment(Comment comment) {
+        logger.info("Deleting comment: " + comment.getText());
     }
 }
